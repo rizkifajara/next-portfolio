@@ -1,0 +1,43 @@
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.17",
+    "@portabletext/react": "^2.0.2",
+    "@sanity/image-url": "^1.0.2",
+    "@tippyjs/react": "^4.2.6",
+    "@types/node": "18.15.10",
+    "@types/react": "18.0.30",
+    "@types/react-dom": "18.0.11",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "framer-motion": "^10.9.2",
+    "next": "13.2.4",
+    "next-sanity": "^4.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-easy-emoji": "^1.8.1",
+    "react-hook-form": "^7.43.9",
+    "react-simple-typewriter": "^5.0.1",
+    "react-social-icons": "^5.15.0",
+    "react-tooltip": "5.8.3",
+    "typescript": "5.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwind-scrollbar": "^3.0.0",
+    "tailwindcss": "^3.3.0"
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "author": "",
+  "license": "ISC"
+}
