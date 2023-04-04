@@ -91,7 +91,7 @@ export default function Home(
         <Projects projects={projects}/>
       </section>
 
-      <section id='contact' className='snap-center'>
+      <section id='contactme' className='snap-center'>
         <ContactMe pageInfo={pageInfo}/>
       </section>
 

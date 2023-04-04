@@ -72,8 +72,9 @@ export default function Header({socials}: any) {
           network='email'
           fgColor='gray' 
           bgColor='transparent'
+          url='#contactme'
         />
-        <Link href="#contact">
+        <Link href="#contactme">
           <p className="uppercase hidden md:inline-flex text-sm text-gray-400">
             Get in touch
           </p>
