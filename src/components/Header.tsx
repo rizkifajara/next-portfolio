@@ -1,5 +1,6 @@
 import React from 'react'
 import { SocialIcon } from 'react-social-icons';
+import { DocumentIcon } from '@heroicons/react/24/solid';
 
 import { motion } from 'framer-motion';
 import 'react-tooltip/dist/react-tooltip.css'
@@ -47,6 +48,21 @@ export default function Header({socials}: any) {
               place={"bottom"} /> 
           </>
         ))}
+
+        <a
+          href="/CV_Rizki Fajar_Software Engineer.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-3 flex items-center justify-center w-10 h-10 transition-colors duration-200"
+        >
+          <DocumentIcon 
+            className="h-6 w-6 text-gray-500"
+          data-tooltip-id="resume-tooltip"
+          data-tooltip-content="Resume" />
+          <Tooltip
+            id="resume-tooltip"
+            place={"bottom"} />
+        </a>
         
       </motion.div>
 
