@@ -21,7 +21,11 @@ function ContactMe({pageInfo}: any) {
   const onSubmit: SubmitHandler<Inputs> = formData => {
     window.location.href = `mailto:rizkifajar456@gmail?subject=${formData.subject}
     &body=Hi, my name is ${formData.name}. ${formData.message} (${formData.email})`;
-}
+  };
+
+  const formatPhoneNumber = (phoneNumber: string) => {
+    return phoneNumber.replace(/^\+/, '');
+  }
 
   return (
     <motion.div 
@@ -52,9 +56,14 @@ function ContactMe({pageInfo}: any) {
             <div className='space-y-10'>
                 <div className='flex items-center space-x-5 justify-center'>
                     <PhoneIcon className='text-[#F7AB0A] h-7 w-7 animate-pulse'/>
-                    <p className='text-2xl'>
+                    <a 
+                    href={`https://wa.me/${formatPhoneNumber(pageInfo.phoneNumber)}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-2xl hover:text-[#F7AB0A] transition-colors duration-200'
+                    >
                         {pageInfo.phoneNumber} (Whatsapp)
-                    </p>
+                    </a>
                 </div>
 
                 <div className='flex items-center space-x-5 justify-center'>
