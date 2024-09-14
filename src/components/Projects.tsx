@@ -5,13 +5,14 @@ import { urlFor } from '@/sanity'
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import ScrollIntoView from 'react-scroll-into-view'
 
 type Props = {
   projects: Project[]
 }
 
 function Projects({projects}: Props) {
+
+  const sortedProjects = projects.sort((a, b) => a.order - b.order)
 
   const containerRef = useRef<HTMLDivElement>(null); // <-- (1) create Ref
 
@@ -52,7 +53,7 @@ function Projects({projects}: Props) {
         <div className='relative w-full flex overflow-x-scroll overflow-y-hidden snap-x snap-mandatory
         z-20 scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80 items-center' ref={containerRef}>
           {/* Project */}
-          {projects?.map((project: any, i: any)=> (
+          {sortedProjects?.map((project: any, i: any)=> (
               
             <div key={"divproject"+project._id} id={"divproject"+project._id} className='flex-shrink-0 flex flex-col space-y-5
             items-center justify-center p-20 md:p-44' style={{height:"148vh", width:"148vw"}}>

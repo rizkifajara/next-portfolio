@@ -6,6 +6,12 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'Order of the project in the project list'
+    }),
+    defineField({
       name: 'title',
       title: 'Title',
       description: 'Title of the project',
@@ -43,5 +49,13 @@ export default defineType({
       type: 'url',
     }),
   ],
-
+  orderings: [
+    {
+      title: 'Order',
+      name: 'order',
+      by: [
+        {field: 'order', direction: 'asc'}
+      ]
+    }
+  ]
 })
