@@ -6,6 +6,12 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'Order of the experience in the experience list'
+    }),
+    defineField({
       name: 'jobTitle',
       title: 'JobTitle',
       type: 'string',
@@ -67,5 +73,13 @@ export default defineType({
       type: 'url',
     }),
   ],
-
+  orderings: [
+    {
+      title: 'Experience Order',
+      name: 'experienceOrder',
+      by: [
+        {field: 'order', direction: 'asc'}
+      ]
+    }
+  ]
 })
