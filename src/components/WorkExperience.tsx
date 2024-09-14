@@ -7,7 +7,7 @@ type Props = {
     experiences: Experience[];
 }
 
-function WorkExperience({experiences}: any) {
+function WorkExperience({experiences}: Props) {
   return (
     <motion.div 
     initial={{
