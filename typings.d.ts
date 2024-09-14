@@ -50,6 +50,7 @@ export interface Experience extends SanityBody {
 }
 
 export interface Project extends SanityBody {
+    order: number;
     title: string;
     _type: 'project';
     image: Image;
