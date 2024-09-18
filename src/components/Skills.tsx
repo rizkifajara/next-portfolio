@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Skill from './Skill'
 import SkillModal from './SkillModal'
@@ -11,9 +11,26 @@ type Props = {
 
 function Skills({skills}: Props) {
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const [displayCount, setDisplayCount] = useState(8);
 
-  const displayedSkills = skills.slice(0, 20);
-  const hasMoreSkills = skills.length > 20;
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setDisplayCount(8);
+      } else if (window.innerWidth < 768) {
+        setDisplayCount(12);
+      } else {
+        setDisplayCount(20);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const displayedSkills = skills.slice(0, displayCount);
+  const hasMoreSkills = skills.length > displayCount;
 
   return (
     <motion.div 
@@ -32,7 +49,7 @@ function Skills({skills}: Props) {
         </h3>
 
         <div className='flex flex-col items-center'>
-          <div className='grid grid-cols-4 gap-5'>
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5'>
               {displayedSkills.map((skill, index) => (
                   <Skill 
                     key={skill._id} 
@@ -63,7 +80,7 @@ function Skills({skills}: Props) {
 
         {showAllSkills && (
           <Modal onClose={() => setShowAllSkills(false)} title="Skills">
-            <div className='grid grid-cols-4 gap-5 max-h-[80vh] overflow-y-auto'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 max-h-[80vh] overflow-y-auto'>
               {skills.map((skill) => (
                 <SkillModal key={skill._id} skill={skill} />
               ))}
