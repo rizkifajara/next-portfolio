@@ -38,6 +38,15 @@ function Skills({skills}: Props) {
                     key={skill._id} 
                     skill={skill} 
                     directionLeft={index % 2 === 0}
+                    className="md:hidden" // Only visible on small screens
+                  />
+              ))}
+              {displayedSkills.map((skill, index) => (
+                  <Skill 
+                    key={`${skill._id}-md`} 
+                    skill={skill} 
+                    directionLeft={index % 2 === 1}
+                    className="hidden md:block" // Only visible on medium screens and up
                   />
               ))}
           </div>
