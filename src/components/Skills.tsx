@@ -1,24 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import Skill from './Skill'
-import {Skill as SkillType} from '../../typings'
+import SkillModal from './SkillModal'
+import { Skill as SkillType } from '../../typings'
+import Modal from './Modal'
 
 type Props = {
     skills: SkillType[];
 }
 
-function Skills({skills}: any) {
+function Skills({skills}: Props) {
+  const [showAllSkills, setShowAllSkills] = useState(false);
+
+  const displayedSkills = skills.slice(0, 20);
+  const hasMoreSkills = skills.length > 20;
+
   return (
     <motion.div 
-    initial={{
-        opacity:0,
-    }}
-    whileInView={{
-        opacity:1
-    }}
-    transition={{
-        duration:1.5
-    }}
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    transition={{ duration: 1.5 }}
     className='flex relative flex-col text-center md:text-left xl:flex-row
     max-w-[2000px] xl:px-10 min-h-screen justify-center xl:space-y-0 mx-auto items-center'
     style={{height:"150vh"}}>
@@ -30,15 +31,36 @@ function Skills({skills}: any) {
             Hover over images for technology stack name
         </h3>
 
-        <div className='grid grid-cols-3 md:grid-cols-4 gap-5'>
-            {skills?.slice(0, skills.length / 2).map((skill:any) => (
-                <Skill key={'skill1'+skill._id} skill={skill} directionLeft={true}/>
-            ))}
+        <div className='flex flex-col items-center'>
+          <div className='grid grid-cols-4 gap-5'>
+              {displayedSkills.map((skill, index) => (
+                  <Skill 
+                    key={skill._id} 
+                    skill={skill} 
+                    directionLeft={index % 2 === 0}
+                  />
+              ))}
+          </div>
 
-            {skills?.slice(skills.length / 2, skills.length).map((skill:any) => (
-                <Skill key={'skill2'+skill._id} skill={skill} directionLeft={false}/>
-            ))}
+          {hasMoreSkills && (
+            <button
+              className='mt-10 bg-[#F7AB0A] text-black py-2 px-4 rounded-md'
+              onClick={() => setShowAllSkills(true)}
+            >
+              Show More Skills
+            </button>
+          )}
         </div>
+
+        {showAllSkills && (
+          <Modal onClose={() => setShowAllSkills(false)} title="Skills">
+            <div className='grid grid-cols-4 gap-5 max-h-[80vh] overflow-y-auto'>
+              {skills.map((skill) => (
+                <SkillModal key={skill._id} skill={skill} />
+              ))}
+            </div>
+          </Modal>
+        )}
     </motion.div>
   )
 }
