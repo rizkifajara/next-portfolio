@@ -4,13 +4,14 @@ import { Skill as SkillType } from '../../typings'
 import { urlFor } from '@/sanity'
 
 type Props = {
-    directionLeft?: boolean
-    skill: SkillType
+    directionLeft?: boolean;
+    skill: SkillType;
+    className?: string;  // Add this line
 }
 
-function Skill({ directionLeft, skill }: Props) {
+function Skill({ directionLeft, skill, className = '' }: Props) {  // Add className here with a default empty string
   return (
-    <div className='group relative flex cursor-pointer'>
+    <div className={`group relative flex cursor-pointer ${className}`}>
         <motion.img 
         initial={{
             x: directionLeft ? -200 : 200, 
