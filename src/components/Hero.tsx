@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from '@/context/ThemeContext';
 
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 import BackgroundCircles from "./BackgroundCircles";
@@ -12,6 +13,8 @@ type Props = {
 };
 
 export default function Hero({ pageInfo }: any) {
+  const { theme } = useTheme();
+
   const [text, count] = useTypewriter({
     words: [
       "Hi, My Name Is Rizki 👋",
@@ -41,7 +44,7 @@ export default function Hero({ pageInfo }: any) {
         </h2>
         <h1 className="text-5xl lg:text-6xl font-semibold px-10">
           <span className="mr-3">{text}</span>
-          <Cursor cursorColor="#F7AB0A" />
+          <Cursor cursorColor={theme === 'dark' ? '#F7AB0A' : '#3B82F6'} />
         </h1>
 
         <div className="pt-5">
