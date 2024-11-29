@@ -66,8 +66,9 @@ export default function Home({
 }: Props) {
   return (
     <div
-      className="bg-[rgb(36,36,36)] text-white snap-y snap-mandatory overflow-y-scroll z-0
-    overflow-x-hidden scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
+      className="bg-light-bg dark:bg-dark-bg text-light-text dark:text-white 
+      snap-y snap-mandatory overflow-y-scroll z-0 overflow-x-hidden 
+      scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
       style={{ height: "100vh" }}
     >
       <div style={{zoom: "67%", transformOrigin: "top left"}}>
