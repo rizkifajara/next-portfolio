@@ -25,36 +25,54 @@ type Props = {
   socials: Social[];
 };
 
-export async function getServerSideProps() {
-  let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPageInfo`);
-  let data = await res.json();
-  const pageInfo: PageInfo = data.pageInfo;
+export async function getStaticProps() {
+  try {
+    const [pageInfoRes, skillsRes, experiencesRes, projectsRes, socialsRes] = 
+      await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPageInfo`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSkills`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getExperience`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getProjects`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSocials`),
+      ]);
 
-  res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSkills`);
-  data = await res.json();
-  const skills: Skill[] = data.skills;
+    const [
+      { pageInfo },
+      { skills },
+      { experiences },
+      { projects },
+      { socials },
+    ] = await Promise.all([
+      pageInfoRes.json(),
+      skillsRes.json(),
+      experiencesRes.json(),
+      projectsRes.json(),
+      socialsRes.json(),
+    ]);
 
-  res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getExperience`);
-  data = await res.json();
-  const experiences: Experience[] = data.experiences;
-
-  res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getProjects`);
-  data = await res.json();
-  const projects: Project[] = data.projects;
-
-  res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSocials`);
-  data = await res.json();
-  const socials: Social[] = data.socials;
-
-  return {
-    props: {
-      pageInfo,
-      skills,
-      experiences,
-      projects,
-      socials,
-    },
-  };
+    return {
+      props: {
+        pageInfo,
+        skills,
+        experiences,
+        projects,
+        socials,
+      },
+      revalidate: 3600, // Revalidate every hour
+    };
+  } catch (error) {
+    console.error('Error in getStaticProps:', error);
+    return {
+      props: {
+        pageInfo: null,
+        skills: [],
+        experiences: [],
+        projects: [],
+        socials: [],
+      },
+      revalidate: 60, // Retry sooner if there was an error
+    };
+  }
 }
 
 export default function Home({
