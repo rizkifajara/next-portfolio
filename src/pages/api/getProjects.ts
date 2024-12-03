@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { groq } from 'next-sanity';
 import { Project } from "../../../typings";
 import { sanityClient } from "../../sanity";
+import { cache } from '../../lib/cache';
 
 const query = groq`
     *[_type == 'project'] | order(order asc) {
@@ -11,12 +12,26 @@ const query = groq`
 `
 type Data = {
     projects: Project[]
-
 }
 
-export default async function handler( req: NextApiRequest, res: NextApiResponse<Data> ) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  try {
+    const cacheKey = 'projects';
+    const cachedData = cache.get<Project[]>(cacheKey);
 
-    const projects: Project[] = await sanityClient.fetch(query)
+    if (cachedData) {
+      return res.status(200).json({ projects: cachedData });
+    }
 
-    res.status(200).json({projects})
+    const projects: Project[] = await sanityClient.fetch(query);
+    cache.set(cacheKey, projects);
+
+    res.status(200).json({ projects });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    res.status(500).json({ projects: [] });
+  }
 }
