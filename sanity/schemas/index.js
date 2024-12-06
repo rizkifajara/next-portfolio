@@ -1,13 +1,9 @@
-import social from './social'
-import skill from './skill'
-import project from './project'
-import experience from './experience'
 import pageInfo from './pageInfo'
-import { createSchema } from 'sanity'
+import experience from './experience'
+import project from './project'
+import skill from './skill'
+import social from './social'
+import blog from './blog'
+import blockContent from './blockContent'
 
-export const schemaTypes = [pageInfo, experience, project, skill, social]
-
-// export default createSchema({
-//     name: 'default',
-//     types: SchemaTypes.concat(schemaTypes)
-// })
+export const schemaTypes = [pageInfo, experience, project, skill, social, blog, blockContent]
