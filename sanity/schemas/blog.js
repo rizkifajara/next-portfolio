@@ -33,6 +33,23 @@ export default defineType({
       type: 'datetime',
     }),
     defineField({
+      name: 'description',
+      title: 'SEO Description',
+      type: 'text',
+      description: 'A brief description (150-160 characters) for SEO and social sharing',
+      validation: (Rule) => Rule.max(160).warning('Description should not exceed 160 characters'),
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'SEO Keywords',
+      type: 'array',
+      description: 'Keywords to help with SEO (comma-separated)',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags'
+      }
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',

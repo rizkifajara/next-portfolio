@@ -20,14 +20,62 @@ interface Post {
   mainImage: any
   body: any[]
   publishedAt: string
+  description?: string
+  keywords?: string[]
 }
 
 export default function BlogPost({ post, socials }: Props) {
+  const canonicalUrl = `https://rizkifajar.dev/blog/${post.slug.current}`
+  
   return (
     <div className="bg-[rgb(36,36,36)] text-white min-h-screen">
       <div style={{zoom: "67%", transformOrigin: "top left"}}>
         <Head>
           <title>{post.title} | Rizki's Blog</title>
+          <meta name="description" content={post.description || `Read ${post.title} on Rizki's Blog`} />
+          <meta name="keywords" content={post.keywords?.join(', ')} />
+          <link rel="canonical" href={canonicalUrl} />
+          
+          {/* Open Graph tags */}
+          <meta property="og:title" content={post.title} />
+          <meta property="og:description" content={post.description || `Read ${post.title} on Rizki's Blog`} />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={canonicalUrl} />
+          {post.mainImage && (
+            <meta property="og:image" content={urlFor(post.mainImage).url()} />
+          )}
+          
+          {/* Twitter Card tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={post.title} />
+          <meta name="twitter:description" content={post.description || `Read ${post.title} on Rizki's Blog`} />
+          {post.mainImage && (
+            <meta name="twitter:image" content={urlFor(post.mainImage).url()} />
+          )}
+          
+          {/* Article Schema Markup */}
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              "headline": post.title,
+              "image": post.mainImage ? [urlFor(post.mainImage).url()] : [],
+              "datePublished": post.publishedAt,
+              "dateModified": post.publishedAt,
+              "author": {
+                "@type": "Person",
+                "name": "Rizki Fajar",
+                "url": "https://rizkifajar.dev"
+              },
+              "publisher": {
+                "@type": "Person",
+                "name": "Rizki Fajar",
+                "url": "https://rizkifajar.dev"
+              },
+              "url": canonicalUrl,
+              "description": post.description || `Read ${post.title} on Rizki's Blog`
+            })}
+          </script>
         </Head>
 
         <Header socials={socials} />
@@ -78,7 +126,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       slug,
       mainImage,
       body,
-      publishedAt
+      publishedAt,
+      description,
+      keywords
     }
   `, { slug: params?.slug })
 
