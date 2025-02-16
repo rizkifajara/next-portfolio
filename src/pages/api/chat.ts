@@ -1,9 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { SearchResult } from '@/utils/pinecone'
 import { queryEmbeddings } from '@/utils/pinecone'
+import NodeCache from 'node-cache'
 
 const OPENROUTER_API_KEY = process.env.OPENAI_API_KEY
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1'
+
+// Cache responses for 1 hour
+const cache = new NodeCache({ stdTTL: 3600 })
 
 // System prompt that defines the assistant's behavior
 const SYSTEM_PROMPT = `You are Rizki Fajar. Respond to questions as if you were Rizki himself, using a friendly, professional, and personal tone.
@@ -33,29 +37,34 @@ Example responses in Indonesian:
 Avoid third-person phrases in either language.`
 
 async function createChatCompletion(messages: any[]) {
-  const response = await fetch(`${OPENROUTER_BASE_URL}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-      'HTTP-Referer': 'https://rizkifajar.dev',
-      'X-Title': 'Rizki Portfolio Chat'
-    },
-    body: JSON.stringify({
-      model: 'openai/gpt-3.5-turbo',
-      messages,
-      temperature: 0.7,
-      max_tokens: 500
+  try {
+    const response = await fetch(`${OPENROUTER_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'https://rizkifajar.dev',
+        'X-Title': 'Rizki Portfolio Chat'
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-3.5-turbo',
+        messages,
+        temperature: 0.7,
+        max_tokens: 500
+      })
     })
-  })
 
-  if (!response.ok) {
-    const error = await response.json()
-    throw new Error(error.message || 'Failed to get chat completion')
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Failed to get chat completion')
+    }
+
+    const data = await response.json()
+    return data.choices[0].message.content
+  } catch (error) {
+    console.error('OpenRouter API error:', error)
+    throw error
   }
-
-  const data = await response.json()
-  return data.choices[0].message.content
 }
 
 export default async function handler(
@@ -73,9 +82,17 @@ export default async function handler(
       return res.status(400).json({ message: 'Message is required' })
     }
 
+    // Check cache first
+    const cacheKey = `chat_${message.toLowerCase().trim()}`
+    const cachedResponse = cache.get(cacheKey)
+    if (cachedResponse) {
+      return res.status(200).json({ reply: cachedResponse })
+    }
+
     // Get relevant context from Pinecone
     const searchResults: SearchResult[] = await queryEmbeddings(message)
     const context = searchResults
+      .filter(result => result.score > 0.7) // Only use highly relevant results
       .map(result => result.text)
       .join('\n\n')
     
@@ -83,6 +100,9 @@ export default async function handler(
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: `Context:\n${context}\n\nQuestion: ${message}` }
     ])
+
+    // Cache the response
+    cache.set(cacheKey, reply)
 
     return res.status(200).json({ reply })
   } catch (error: any) {
