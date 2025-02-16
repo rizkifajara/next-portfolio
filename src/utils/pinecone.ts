@@ -16,11 +16,19 @@ interface PineconeIndex {
 }
 
 interface PineconeMatch {
+  id: string
+  metadata?: Record<string, any>
+  score?: number
+}
+
+export interface SearchResult {
+  id: string
+  text: string
+  score: number
   metadata?: {
-    text?: string
+    category: string
     [key: string]: any
   }
-  score?: number
 }
 
 class PineconeService {
@@ -143,6 +151,7 @@ class PineconeService {
       })
 
       return results.matches.map((match: PineconeMatch) => ({
+        id: match.id,
         text: match.metadata?.text,
         score: match.score,
         metadata: match.metadata,

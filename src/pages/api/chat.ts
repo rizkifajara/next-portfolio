@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import type { SearchResult } from '@/utils/pinecone'
 import { queryEmbeddings } from '@/utils/pinecone'
 
 const OPENROUTER_API_KEY = process.env.OPENAI_API_KEY
@@ -73,7 +74,7 @@ export default async function handler(
     }
 
     // Get relevant context from Pinecone
-    const searchResults = await queryEmbeddings(message)
+    const searchResults: SearchResult[] = await queryEmbeddings(message)
     const context = searchResults
       .map(result => result.text)
       .join('\n\n')
