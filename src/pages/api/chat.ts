@@ -2,9 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { SearchResult } from '@/utils/pinecone'
 import { queryEmbeddings } from '@/utils/pinecone'
 import NodeCache from 'node-cache'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const OPENROUTER_API_KEY = process.env.OPENAI_API_KEY
-const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1'
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY!
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 
 // Cache responses for 1 hour
 const cache = new NodeCache({ stdTTL: 3600 })
@@ -38,31 +39,22 @@ Avoid third-person phrases in either language.`
 
 async function createChatCompletion(messages: any[]) {
   try {
-    const response = await fetch(`${OPENROUTER_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': 'https://rizkifajar.dev',
-        'X-Title': 'Rizki Portfolio Chat'
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-3.5-turbo',
-        messages,
-        temperature: 0.7,
-        max_tokens: 500
-      })
+    const userMessage = messages[messages.length - 1].content
+
+    // Create chat model with Gemini-Pro
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-2.0-flash'
     })
 
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'Failed to get chat completion')
-    }
-
-    const data = await response.json()
-    return data.choices[0].message.content
+    // Send message and get response
+    const result = await model.generateContent([
+      { text: SYSTEM_PROMPT },
+      { text: userMessage }
+    ])
+    const response = await result.response
+    return response.text()
   } catch (error) {
-    console.error('OpenRouter API error:', error)
+    console.error('Gemini API error:', error)
     throw error
   }
 }
