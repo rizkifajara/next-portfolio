@@ -25,7 +25,7 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
 - Framer Motion for animations
 - Sanity CMS for content management
 - Vercel for deployment
-- OpenRouter for AI chat capabilities
+- Gemini API for AI chat capabilities
 - Pinecone for vector database
 - Xenova Transformers for embeddings
 
@@ -36,7 +36,7 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
 - Node.js (v14 or later)
 - npm or yarn
 - A Sanity account (for CMS functionality)
-- OpenRouter API key (for AI chat)
+- Gemini API key (for AI chat)
 - Pinecone API key and environment (for vector database)
 
 ### Installation
@@ -60,7 +60,7 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
    NEXT_PUBLIC_BASE_URL=http://localhost:3000
    
    # AI Chat Configuration
-   OPENAI_API_KEY=your_openrouter_api_key
+   GEMINI_API_KEY=your_gemini_api_key
    PINECONE_API_KEY=your_pinecone_api_key
    PINECONE_ENVIRONMENT=your_pinecone_environment
    ```
@@ -95,7 +95,7 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
 ## AI Chat Configuration
 
 The AI chat feature uses:
-- OpenRouter for generating responses
+- Gemini API for generating responses
 - Pinecone for storing and retrieving relevant context
 - Xenova Transformers for generating embeddings
 
@@ -139,6 +139,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - [Sanity Documentation](https://www.sanity.io/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Framer Motion Documentation](https://www.framer.com/motion/)
-- [OpenRouter Documentation](https://openrouter.ai/docs)
+- [Gemini API Documentation](https://ai.google.dev/)
 - [Pinecone Documentation](https://docs.pinecone.io)
 - [Xenova Transformers](https://github.com/xenova/transformers.js)
