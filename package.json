@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "embeddings": "npx tsx scripts/populate-embeddings.ts"
+    "embeddings": "npx tsx scripts/populate-embeddings.ts",
+    "update-sitemap": "npx tsx scripts/updateSitemap.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",

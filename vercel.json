@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "/api/update-sitemap",
+    "schedule": "0 0 * * *"
+  }]
+}
