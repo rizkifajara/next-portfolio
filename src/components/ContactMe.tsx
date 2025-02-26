@@ -45,13 +45,13 @@ function ContactMe({pageInfo}: any) {
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full dark:bg-opacity-20"
+              className="absolute rounded-full"
               style={{
                 width: `${Math.floor(Math.random() * 200 + 100)}px`,
                 height: `${Math.floor(Math.random() * 200 + 100)}px`,
                 backgroundColor: i % 2 === 0 
-                  ? 'var(--geometry-primary, rgba(13, 110, 253, 0.2))' 
-                  : 'var(--geometry-secondary, rgba(108, 117, 125, 0.2))',
+                  ? 'var(--geometry-primary)' 
+                  : 'var(--geometry-secondary)',
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
                 opacity: 0.4,
@@ -69,33 +69,33 @@ function ContactMe({pageInfo}: any) {
         <div className='flex flex-col space-y-10 z-10 w-full max-w-2xl mx-auto'>
             <h4 className='text-4xl font-semibold text-center'>
                 Need help for your business?{" "}
-                <span className='decoration-[#F7AB0A]/50 underline'>
+                <span className='decoration-[#3B82F6]/50 dark:decoration-[#F7AB0A]/50 underline'>
                     Let's talk.
                 </span>
             </h4>
 
             <div className='space-y-10'>
                 <div className='flex items-center space-x-5 justify-center'>
-                    <PhoneIcon className='text-[#F7AB0A] h-7 w-7 animate-pulse'/>
+                    <PhoneIcon className='text-[#3B82F6] dark:text-[#F7AB0A] h-7 w-7 animate-pulse'/>
                     <a 
                     href={`https://wa.me/${formatPhoneNumber(pageInfo.phoneNumber)}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='text-2xl hover:text-[#F7AB0A] transition-colors duration-200'
+                    className='text-2xl hover:text-[#3B82F6] dark:hover:text-[#F7AB0A] transition-colors duration-200'
                     >
                         {pageInfo.phoneNumber} (Whatsapp)
                     </a>
                 </div>
 
                 <div className='flex items-center space-x-5 justify-center'>
-                    <EnvelopeIcon className='text-[#F7AB0A] h-7 w-7 animate-pulse'/>
+                    <EnvelopeIcon className='text-[#3B82F6] dark:text-[#F7AB0A] h-7 w-7 animate-pulse'/>
                     <p className='text-2xl'>
                         {pageInfo.email}
                     </p>
                 </div>
 
                 <div className='flex items-center space-x-5 justify-center'>
-                    <MapPinIcon className='text-[#F7AB0A] h-7 w-7 animate-pulse'/>
+                    <MapPinIcon className='text-[#3B82F6] dark:text-[#F7AB0A] h-7 w-7 animate-pulse'/>
                     <p className='text-2xl'>
                         {pageInfo.address}
                     </p>
@@ -141,9 +141,9 @@ function ContactMe({pageInfo}: any) {
                 <div className="flex justify-center pt-2">
                     <button 
                         type="submit"
-                        className='bg-[#0d6efd] dark:bg-[#F7AB0A] py-5 px-8 rounded-md 
+                        className='bg-[#3B82F6] dark:bg-[#F7AB0A] py-5 px-8 rounded-md 
                         text-white dark:text-white font-bold text-lg 
-                        hover:bg-[#0d6efd]/90 dark:hover:bg-[#F7AB0A]/90 transition-all'
+                        hover:bg-[#3B82F6]/90 dark:hover:bg-[#F7AB0A]/90 transition-all'
                     >
                         Submit
                     </button>

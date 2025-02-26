@@ -17,8 +17,8 @@
         text-gray-500 dark:text-gray-400 
         placeholder-gray-500 
         transition-all 
-        hover:border-[#F7AB0A]/40
-        focus:border-[#F7AB0A]/40 
+        hover:border-[#3B82F6]/40 dark:hover:border-[#F7AB0A]/40
+        focus:border-[#3B82F6]/40 dark:focus:border-[#F7AB0A]/40 
         focus:bg-slate-200/10 dark:focus:bg-gray-900/40;
     }
 }
@@ -33,12 +33,12 @@
 }
 
 /* Dark mode styles */
-[data-theme='dark'] {
-  --background: rgb(36,36,36);
-  --text: #ffffff;
-  --accent: #F7AB0A;
-  --geometry-primary: rgba(247, 171, 10, 0.2);    /* Dark mode yellow (#F7AB0A) */
-  --geometry-secondary: rgba(156, 163, 175, 0.2);  /* Dark mode gray */
+.dark {
+  --background-dark: #1a1a1a;
+  --text-dark: #e9ecef;
+  --accent-dark: #F7AB0A;
+  --geometry-primary: rgba(247, 171, 10, 0.2);    /* Dark mode orange */
+  --geometry-secondary: rgba(247, 171, 10, 0.1);  /* Dark mode orange (lighter) */
 }
 
 /* Base styles with theme support */
