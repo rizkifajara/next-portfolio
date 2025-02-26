@@ -6,15 +6,15 @@ import WorkExperience from "@/components/WorkExperience";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import ContactMe from "@/components/ContactMe";
+import Blog from "@/components/Blog";
 import Link from "next/link";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
-import { PageInfo, Experience, Skill, Project, Social } from "../../typings";
+import { PageInfo, Experience, Skill, Project, Social, Post } from "../../typings";
 import { fetchPageInfo } from "../../utils/fetchPageInfo";
 import { fetchSkills } from "../../utils/fetchSkills";
 import { fetchExperience } from "../../utils/fetchExperience";
 import { fetchProjects } from "../../utils/fetchProjects";
 import { fetchSocials } from "../../utils/fetchSocials";
-// import { GetServerSideProps, GetStaticProps } from 'next/types'
 import "react-tooltip/dist/react-tooltip.css";
 
 type Props = {
@@ -23,17 +23,19 @@ type Props = {
   skills: Skill[];
   projects: Project[];
   socials: Social[];
+  posts: Post[];
 };
 
 export async function getStaticProps() {
   try {
-    const [pageInfoRes, skillsRes, experiencesRes, projectsRes, socialsRes] = 
+    const [pageInfoRes, skillsRes, experiencesRes, projectsRes, socialsRes, postsRes] = 
       await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPageInfo`),
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSkills`),
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getExperience`),
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getProjects`),
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getSocials`),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getBlogPosts`),
       ]);
 
     const [
@@ -42,12 +44,14 @@ export async function getStaticProps() {
       { experiences },
       { projects },
       { socials },
+      { posts },
     ] = await Promise.all([
       pageInfoRes.json(),
       skillsRes.json(),
       experiencesRes.json(),
       projectsRes.json(),
       socialsRes.json(),
+      postsRes.json(),
     ]);
 
     return {
@@ -57,6 +61,7 @@ export async function getStaticProps() {
         experiences,
         projects,
         socials,
+        posts,
       },
       revalidate: 3600, // Revalidate every hour
     };
@@ -69,6 +74,7 @@ export async function getStaticProps() {
         experiences: [],
         projects: [],
         socials: [],
+        posts: [],
       },
       revalidate: 60, // Retry sooner if there was an error
     };
@@ -81,6 +87,7 @@ export default function Home({
   skills,
   projects,
   socials,
+  posts,
 }: Props) {
   return (
     <div
@@ -123,6 +130,11 @@ export default function Home({
 
       <section id="projects" className="snap-start">
         <Projects projects={projects} />
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="snap-start">
+        <Blog posts={posts} />
       </section>
 
       <section id="contactme" className="snap-center">

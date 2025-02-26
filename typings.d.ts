@@ -65,3 +65,18 @@ export interface Social extends SanityBody {
     title: string;
     url: string;
 }
+
+export interface Post extends SanityBody {
+    _type: 'post';
+    title: string;
+    slug: {
+        current: string;
+    };
+    mainImage: {
+        asset: {
+            _ref: string;
+        };
+    };
+    publishedAt: string;
+    body: any[];
+}
