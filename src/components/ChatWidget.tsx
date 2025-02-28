@@ -187,24 +187,53 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Chat Button */}
-      <motion.button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`${
-          theme === 'dark' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-500 hover:bg-blue-600'
-        } text-white rounded-full p-4 shadow-lg`}
-        variants={buttonVariants}
-        initial="initial"
-        animate="animate"
-        whileHover="hover"
-        whileTap="tap"
-      >
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
+      <div className="relative">
+        {/* Text Box */}
+        <motion.div 
+          className="absolute pointer-events-none" 
+          style={{ right: '4.5rem', bottom: '0.5rem' }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: [0, 1, 1, 0],
+            scale: [0.8, 1, 1, 0.8],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            repeatDelay: 1
+          }}
         >
-          {isOpen ? <IoClose size={24} /> : <FaRobot size={24} />}
+          <div className="bg-gray-800 dark:bg-gray-700 text-white px-4 py-2 rounded-l-xl relative flex items-center">
+            <span className="text-[10px] font-medium whitespace-nowrap">ASK ME ANYTHING</span>
+            {/* Sharp edge on the right */}
+            <div className="absolute right-0 top-0 h-full w-2 bg-gray-800 dark:bg-gray-700"></div>
+            {/* Triangle pointer */}
+            <div className="absolute -right-2 bottom-2 w-0 h-0 
+              border-t-8 border-t-transparent
+              border-l-8 border-l-gray-800 dark:border-l-gray-700
+              border-b-8 border-b-transparent">
+            </div>
+          </div>
         </motion.div>
-      </motion.button>
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`${
+            theme === 'dark' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-500 hover:bg-blue-600'
+          } text-white rounded-full p-4 shadow-lg relative z-10`}
+          variants={buttonVariants}
+          initial="initial"
+          animate="animate"
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <motion.div
+            animate={{ rotate: isOpen ? 0 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {isOpen ? <IoClose size={24} /> : <FaRobot size={24} />}
+          </motion.div>
+        </motion.button>
+      </div>
 
       {/* Chat Window */}
       <AnimatePresence mode="wait">
