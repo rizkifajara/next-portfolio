@@ -48,6 +48,20 @@ export default defineType({
       title: 'LinkToBuild',
       type: 'url',
     }),
+    defineField({
+      name: 'screenshots',
+      title: 'Screenshots',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true
+          }
+        }
+      ],
+      description: 'Add screenshots of the project'
+    }),
   ],
   orderings: [
     {
