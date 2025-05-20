@@ -1,20 +1,23 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {motion} from 'framer-motion'
 import { Project } from '../../typings'
 import { urlFor } from '@/sanity'
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import ProjectModal from './ProjectModal'
 
 type Props = {
   projects: Project[]
 }
 
 function Projects({projects}: Props) {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sortedProjects = projects.sort((a, b) => a.order - b.order)
 
-  const containerRef = useRef<HTMLDivElement>(null); // <-- (1) create Ref
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (direction: 'left' | 'right') => {
     const container = containerRef.current;
@@ -27,6 +30,11 @@ function Projects({projects}: Props) {
       });
     }
   }
+
+  const handleProjectClick = (project: Project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
 
   return (
     <motion.div 
@@ -63,7 +71,7 @@ function Projects({projects}: Props) {
                     <ChevronLeftIcon key={"iconScrollLeft"+project._id} className='h-10 w-10 rounded-full filter grayscale
                     hover:grayscale-0 cursor-pointer' />
                   </a>
-                <a key={"linkProject"+i} href={project.linkToBuild} target="_blank">
+                <a key={"linkProject"+i} onClick={() => handleProjectClick(project)} className="cursor-pointer">
                   <motion.img 
                   key={"imgProject"+i}
                   initial={{
@@ -124,6 +132,13 @@ function Projects({projects}: Props) {
         </div>
 
         <div className='w-full absolute top-[30%] bg-light-accent/10 dark:bg-[#F7AB0A]/10 left-0 h-[500px] -skew-y-12'/>
+
+        {/* Modal */}
+        <ProjectModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          project={selectedProject}
+        />
     </motion.div>
   )
 }

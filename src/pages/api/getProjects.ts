@@ -7,7 +7,14 @@ import { cache } from '../../lib/cache';
 const query = groq`
     *[_type == 'project'] | order(order asc) {
         ...,
-        technologies[]->
+        technologies[]->,
+        "screenshots": screenshots[] {
+            _type,
+            asset-> {
+                _id,
+                url
+            }
+        }
     }
 `
 type Data = {
