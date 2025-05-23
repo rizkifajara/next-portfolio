@@ -43,7 +43,7 @@ async function createChatCompletion(messages: any[]) {
 
     // Create chat model with Gemini-Pro
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash'
+      model: 'Gemini 2.5 Flash Preview 05-20'
     })
 
     // Send message and get response
