@@ -26,8 +26,6 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
 - Sanity CMS for content management
 - Vercel for deployment
 - Gemini API for AI chat capabilities
-- Pinecone for vector database
-- Xenova Transformers for embeddings
 
 ## Getting Started
 
@@ -37,7 +35,6 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
 - npm or yarn
 - A Sanity account (for CMS functionality)
 - Gemini API key (for AI chat)
-- Pinecone API key and environment (for vector database)
 
 ### Installation
 
@@ -61,8 +58,6 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
    
    # AI Chat Configuration
    GEMINI_API_KEY=your_gemini_api_key
-   PINECONE_API_KEY=your_pinecone_api_key
-   PINECONE_ENVIRONMENT=your_pinecone_environment
    ```
 
 4. Set up your personal information:
@@ -75,34 +70,32 @@ This is a personal portfolio website built with Next.js, React, and Sanity CMS. 
          "text": "Your about text here",
          "metadata": { "category": "about" }
        },
+       {
+         "id": "skills-1",
+         "text": "Your technical skills here",
+         "metadata": { "category": "skills" }
+       }
        // Add more chunks for different sections
      ]
    }
    ```
 
-5. Generate embeddings:
-   ```
-   npm run embeddings
-   ```
-
-6. Run the development server:
+5. Run the development server:
    ```
    npm run dev
    ```
 
-7. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
 ## AI Chat Configuration
 
 The AI chat feature uses:
 - Gemini API for generating responses
-- Pinecone for storing and retrieving relevant context
-- Xenova Transformers for generating embeddings
+- Simple JSON file for storing personal information context
 
 To update the chat's knowledge:
 1. Modify the chunks in `data/personal-info.json`
-2. Run `npm run embeddings` to update the vector database
-3. The chat will automatically use the updated information
+2. The changes are automatically reflected (no additional setup needed)
 
 The chat supports:
 - Bilingual responses (English and Indonesian)
@@ -110,19 +103,28 @@ The chat supports:
 - Natural conversation style
 - Context-aware responses based on your personal information
 
+### Personal Info Structure
+
+Each chunk in your `personal-info.json` should have:
+- `id`: Unique identifier for the chunk
+- `text`: The actual content that will be used as context
+- `metadata.category`: Category for organization (e.g., "about", "skills", "experience")
+
 ## Customization
 
 - Update the content through the Sanity Studio
 - Modify the components in the `src/components` directory to change the layout and design
 - Adjust the styling using Tailwind classes or by modifying the `tailwind.config.js` file
 - Customize the chat prompt and style in `src/pages/api/chat.ts` and `src/components/ChatWidget.tsx`
+- Add or modify personal information in `data/personal-info.json`
 
 ## Deployment
 
 This project is set up for easy deployment on Vercel:
 1. Connect your GitHub repository to Vercel
 2. Add your environment variables in the Vercel project settings
-3. Deploy and enjoy automatic updates on every push to main
+3. Make sure `data/personal-info.json` is committed to your repository
+4. Deploy and enjoy automatic updates on every push to main
 
 ## Contributing
 
@@ -140,5 +142,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Framer Motion Documentation](https://www.framer.com/motion/)
 - [Gemini API Documentation](https://ai.google.dev/)
-- [Pinecone Documentation](https://docs.pinecone.io)
-- [Xenova Transformers](https://github.com/xenova/transformers.js)

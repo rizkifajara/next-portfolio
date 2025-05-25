@@ -1,0 +1,39 @@
+{
+  "chunks": [
+    {
+      "id": "about-1",
+      "text": "I am Rizki Fajar, a software engineer specializing in full-stack web development. I have experience with React, Next.js, TypeScript, and various backend technologies.",
+      "metadata": { "category": "about" }
+    },
+    {
+      "id": "about-2",
+      "text": "I am originally from Indonesia 🇮🇩, specifically the city of Yogyakarta. Feel free to say hi if you meet me there.",
+      "metadata": { "category": "about" }
+    },
+    {
+      "id": "skills-1",
+      "text": "My technical skills include:\n- Frontend: React, Next.js, TypeScript, TailwindCSS\n- Backend: Node.js, Express, Python\n- Database: PostgreSQL, MongoDB\n- Tools: Git, Docker, AWS",
+      "metadata": { "category": "skills" }
+    },
+    {
+      "id": "education-1",
+      "text": "Im currently pursuing a Bachelor's degree in Computer Science from the Universitas Gadjah Mada. I expect to graduate in August 2025.",
+      "metadata": { "category": "education" }
+    },
+    {
+      "id": "education-2",
+      "text": "I have completed my high school education from SMAN 3 Semarang. There, I've joined a computer club, and participated in a few competitions.",
+      "metadata": { "category": "education" }
+    },
+    {
+      "id": "experience-1",
+      "text": "I am currently working as an AI Software Engineer at Platter.ai, where I build AI solutions for government agencies using stack like Python, FastAPI, Haystack, and PostgreSQL.",
+      "metadata": { "category": "experience" }
+    },
+    {
+      "id": "experience-2",
+      "text": "I have a company which I co-founded and work part-time as a backend engineer on a startup called BeProfesion, an online course platform for exam certification preparation. There I use stack such as NodeJS, MongoDB, and Midtrans Payment Gateway.",
+      "metadata": { "category": "experience" }
+    }
+  ]
+}

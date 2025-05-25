@@ -1,14 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { SearchResult } from '@/utils/pinecone'
-import { queryEmbeddings } from '@/utils/pinecone'
 import NodeCache from 'node-cache'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 
 // Cache responses for 1 hour
 const cache = new NodeCache({ stdTTL: 3600 })
+
+// Function to load context from JSON file
+function loadPersonalContext(): string {
+  try {
+    const personalInfoPath = join(process.cwd(), 'data', 'personal-info.json')
+    const fileContent = readFileSync(personalInfoPath, 'utf-8')
+    const personalInfo = JSON.parse(fileContent)
+    
+    return personalInfo.chunks
+      .map((chunk: any) => chunk.text)
+      .join('\n\n')
+  } catch (error) {
+    console.error('Error loading personal context:', error)
+    return ''
+  }
+}
 
 // System prompt that defines the assistant's behavior
 const SYSTEM_PROMPT = `You are Rizki Fajar. Respond to questions as if you were Rizki himself, using a friendly, professional, and personal tone.
@@ -43,7 +59,7 @@ async function createChatCompletion(messages: any[]) {
 
     // Create chat model with Gemini-Pro
     const model = genAI.getGenerativeModel({ 
-      model: 'Gemini 2.5 Flash Preview 05-20'
+      model: 'gemini-2.5-flash-preview-05-20'
     })
 
     // Send message and get response
@@ -81,16 +97,18 @@ export default async function handler(
       return res.status(200).json({ reply: cachedResponse })
     }
 
-    // Get relevant context from Pinecone
-    const searchResults: SearchResult[] = await queryEmbeddings(message)
-    const context = searchResults
-      .filter(result => result.score > 0.7) // Only use highly relevant results
-      .map(result => result.text)
-      .join('\n\n')
+    // Load personal context from JSON file
+    const personalContext = loadPersonalContext()
+    
+    // Append context to user message
+    const messageWithContext = `Personal Information about Rizki Fajar:
+${personalContext}
+
+User Question: ${message}`
     
     const reply = await createChatCompletion([
       { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: `Context:\n${context}\n\nQuestion: ${message}` }
+      { role: "user", content: messageWithContext }
     ])
 
     // Cache the response
