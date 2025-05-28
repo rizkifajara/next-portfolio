@@ -20,7 +20,7 @@ function Skills({skills}: Props) {
       } else if (window.innerWidth < 768) {
         setDisplayCount(12);
       } else {
-        setDisplayCount(20);
+        setDisplayCount(16);
       }
     };
 
@@ -97,7 +97,7 @@ function Skills({skills}: Props) {
                 text-white dark:text-white 
                 hover:bg-light-accent dark:hover:bg-[#F7AB0A] 
                 transition-colors duration-200 
-                py-2 px-4 rounded-md font-semibold'
+                py-2 px-4 rounded-full font-semibold'
                 onClick={() => setShowAllSkills(true)}
               >
                 Show More Skills
@@ -137,7 +137,7 @@ function Skills({skills}: Props) {
             <div className="overflow-y-auto max-h-[calc(90vh-8rem)] scrollbar-thin 
             scrollbar-track-gray-200 dark:scrollbar-track-gray-700 
             scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-500">
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-4">
                 {skills.map((skill) => (
                   <SkillModal 
                     key={skill._id} 

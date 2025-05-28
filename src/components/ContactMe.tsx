@@ -141,7 +141,7 @@ function ContactMe({pageInfo}: any) {
                 <div className="flex justify-center pt-2">
                     <button 
                         type="submit"
-                        className='bg-[#3B82F6] dark:bg-[#F7AB0A] py-5 px-8 rounded-md 
+                        className='bg-[#3B82F6] dark:bg-[#F7AB0A] py-5 px-8 rounded-full 
                         text-white dark:text-white font-bold text-lg 
                         hover:bg-[#3B82F6]/90 dark:hover:bg-[#F7AB0A]/90 transition-all'
                     >
