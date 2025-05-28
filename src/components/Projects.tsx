@@ -22,10 +22,22 @@ function Projects({projects}: Props) {
   const handleScroll = (direction: 'left' | 'right') => {
     const container = containerRef.current;
     if (container) {
-      const scrollAmount = container.clientWidth;
-      const newScrollPosition = direction === 'left' ? container.scrollLeft - scrollAmount : container.scrollLeft + scrollAmount;
+      // Calculate the actual width of each project item (148vw)
+      const projectItemWidth = window.innerWidth * 1.48;
+      
+      // Find current project index based on scroll position
+      const currentIndex = Math.round(container.scrollLeft / projectItemWidth);
+      
+      // Calculate target index
+      const targetIndex = direction === 'left' ? 
+        Math.max(0, currentIndex - 1) : 
+        Math.min(sortedProjects.length - 1, currentIndex + 1);
+      
+      // Scroll to exact position of target project
+      const targetScrollPosition = targetIndex * projectItemWidth;
+      
       container.scrollTo({
-        left: newScrollPosition,
+        left: targetScrollPosition,
         behavior: 'smooth'
       });
     }
@@ -64,7 +76,7 @@ function Projects({projects}: Props) {
           {sortedProjects?.map((project: any, i: any)=> (
               
             <div key={"divproject"+project._id} id={"divproject"+project._id} className='flex-shrink-0 flex flex-col space-y-5
-            items-center justify-center p-20 md:p-44' style={{height:"148vh", width:"148vw"}}>
+            items-center justify-center p-20 md:p-44 snap-center' style={{height:"148vh", width:"148vw"}}>
               <div className="flex flex-row items-center justify-center space-x-5">
                 {/* Scroll button */}
                   <a onClick={() => handleScroll('left')} key={"buttonScrollLeft"+project._id} className="relative">
@@ -91,6 +103,8 @@ function Projects({projects}: Props) {
                   height={250}
                   src={urlFor(project.image).url()} 
                   alt={project.title}
+                  className="object-cover rounded-lg"
+                  style={{width: "250px", height: "250px"}}
                   />
                 </a>
                   <a onClick={() => handleScroll('right')} key={"buttonScrollRight"+project._id} className="relative">
