@@ -93,36 +93,52 @@ const ChatMessage = memo(({ message, theme }: { message: Message, theme: 'dark' 
 
 ChatMessage.displayName = 'ChatMessage'
 
-// Memoize loading indicator
-const LoadingIndicator = memo(({ theme }: { theme: 'dark' | 'light' }) => (
-  <motion.div
-    className="flex justify-start"
-    initial={{ opacity: 0, x: -50 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -50 }}
-    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-  >
-    <div className={`rounded-lg p-3 ${
-      theme === 'dark'
-        ? 'bg-gray-700 text-gray-100'
-        : 'bg-gray-100 text-gray-800'
-    }`}>
-      <motion.div
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [1, 0.7, 1]
-        }}
-        transition={{ 
-          repeat: Infinity,
-          duration: 1,
-          ease: "easeInOut"
-        }}
-      >
-        Typing...
-      </motion.div>
+// Memoize loading indicator with multiple animation options
+const LoadingIndicator = memo(({ theme }: { theme: 'dark' | 'light' }) => {
+  // Option 1: Animated dots (classic typing indicator)
+  const AnimatedDots = () => (
+    <div className="flex items-center space-x-1">
+      <div className="flex space-x-1">
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="w-2 h-2 bg-current rounded-full"
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{
+              duration: 0.6,
+              repeat: Infinity,
+              delay: i * 0.2
+            }}
+          />
+        ))}
+      </div>
     </div>
-  </motion.div>
-))
+  )
+
+  // Choose which animation to use (you can change this)
+  const SelectedAnimation = AnimatedDots // Change this to any of the above
+
+  return (
+    <motion.div
+      className="flex justify-start"
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    >
+      <div className={`rounded-lg p-3 ${
+        theme === 'dark'
+          ? 'bg-gray-700 text-gray-100'
+          : 'bg-gray-100 text-gray-800'
+      }`}>
+        <SelectedAnimation />
+      </div>
+    </motion.div>
+  )
+})
 
 LoadingIndicator.displayName = 'LoadingIndicator'
 
