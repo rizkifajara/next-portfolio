@@ -1,6 +1,6 @@
 import { PortableText } from '@portabletext/react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Image from 'next/image'
 import { urlFor } from '../sanity'
 

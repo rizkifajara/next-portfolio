@@ -1,3 +1,13 @@
+// Module declarations for packages without proper TypeScript support
+declare module 'react-syntax-highlighter' {
+  export const Prism: any;
+  export default any;
+}
+
+declare module 'react-syntax-highlighter/dist/esm/styles/prism' {
+  export const tomorrow: any;
+}
+
 interface SanityBody {
     _createdAt: string;
     _id: string;
