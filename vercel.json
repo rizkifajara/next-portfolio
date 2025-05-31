@@ -1,17 +1,13 @@
 {
   "redirects": [
     {
-      "source": "http://rizkifajar.dev/(.*)",
-      "destination": "https://rizkifajar.dev/$1",
-      "permanent": true
-    },
-    {
-      "source": "http://www.rizkifajar.dev/(.*)",
-      "destination": "https://rizkifajar.dev/$1",
-      "permanent": true
-    },
-    {
-      "source": "https://www.rizkifajar.dev/(.*)",
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.rizkifajar.dev"
+        }
+      ],
       "destination": "https://rizkifajar.dev/$1",
       "permanent": true
     }
