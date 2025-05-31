@@ -54,6 +54,7 @@ html, section, div {
     scroll-behavior: smooth;
 }
 
+/* Commented out wave animation that might be causing CSS loader issues
 @keyframes wave {
   0%, 100% { d: path("M0,100 Q25,90 50,100 Q75,110 100,100 L100,100 L0,100 Z"); }
   50% { d: path("M0,100 Q25,110 50,100 Q75,90 100,100 L100,100 L0,100 Z"); }
@@ -62,3 +63,4 @@ html, section, div {
 .wave {
   animation: wave 10s ease-in-out infinite;
 }
+*/

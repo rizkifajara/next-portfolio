@@ -1,4 +1,17 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.rizkifajar.dev"
+        }
+      ],
+      "destination": "https://rizkifajar.dev/$1",
+      "permanent": true
+    }
+  ],
   "crons": [{
     "path": "/api/update-sitemap",
     "schedule": "0 0 * * *"

@@ -3,12 +3,211 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { PageInfo } from '../../typings';
 import { urlFor } from '@/sanity';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the Globe demo to prevent SSR issues
+const GlobeDemo = dynamic(() => import('./globe-demo'), {
+  ssr: false,
+});
 
 type Props = {
   pageInfo: PageInfo;
 }
 
-export default function About({pageInfo}: any) {
+const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
+const sampleArcs = [
+  {
+    order: 1,
+    startLat: -19.885592,
+    startLng: -43.951191,
+    endLat: -22.9068,
+    endLng: -43.1729,
+    arcAlt: 0.1,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 1,
+    startLat: 28.6139,
+    startLng: 77.209,
+    endLat: 3.139,
+    endLng: 101.6869,
+    arcAlt: 0.2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 1,
+    startLat: -19.885592,
+    startLng: -43.951191,
+    endLat: -1.303396,
+    endLng: 36.852443,
+    arcAlt: 0.5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 2,
+    startLat: 1.3521,
+    startLng: 103.8198,
+    endLat: 35.6762,
+    endLng: 139.6503,
+    arcAlt: 0.2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 2,
+    startLat: 51.5072,
+    startLng: -0.1276,
+    endLat: 3.139,
+    endLng: 101.6869,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 2,
+    startLat: -15.785493,
+    startLng: -47.909029,
+    endLat: 36.162909,
+    endLng: -115.119411,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 3,
+    startLat: -33.8688,
+    startLng: 151.2093,
+    endLat: 22.3193,
+    endLng: 114.1694,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 3,
+    startLat: 21.3099,
+    startLng: -157.8581,
+    endLat: 40.7128,
+    endLng: -74.006,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 3,
+    startLat: -6.2088,
+    startLng: 106.8456,
+    endLat: 51.5072,
+    endLng: -0.1276,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 4,
+    startLat: 11.986597,
+    startLng: 8.571831,
+    endLat: -15.595412,
+    endLng: -56.05918,
+    arcAlt: 0.5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 4,
+    startLat: -34.6118,
+    startLng: -58.3960,
+    endLat: 35.6762,
+    endLng: 139.6503,
+    arcAlt: 0.7,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 4,
+    startLat: 22.3193,
+    startLng: 114.1694,
+    endLat: 51.5072,
+    endLng: -0.1276,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 5,
+    startLat: 25.276987,
+    startLng: 55.296249,
+    endLat: 37.6872,
+    endLng: -122.4194,
+    arcAlt: 0.9,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 5,
+    startLat: 1.3521,
+    startLng: 103.8198,
+    endLat: -33.8688,
+    endLng: 151.2093,
+    arcAlt: 0.2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 6,
+    startLat: 31.2304,
+    startLng: 121.4737,
+    endLat: 37.6872,
+    endLng: -122.4194,
+    arcAlt: 0.3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 6,
+    startLat: -15.432563,
+    startLng: 28.315853,
+    endLat: 1.094136,
+    endLng: -63.34546,
+    arcAlt: 0.7,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 7,
+    startLat: 12.9716,
+    startLng: 77.5946,
+    endLat: 28.6139,
+    endLng: 77.209,
+    arcAlt: 0.1,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 7,
+    startLat: 26.8206,
+    startLng: 30.8025,
+    endLat: 3.139,
+    endLng: 101.6869,
+    arcAlt: 0.2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 8,
+    startLat: -14.270972,
+    startLng: -170.132217,
+    endLat: -35.110117,
+    endLng: 173.550017,
+    arcAlt: 0.2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 8,
+    startLat: -21.118680,
+    startLng: -175.208755,
+    endLat: 22.3193,
+    endLng: 114.1694,
+    arcAlt: 0.5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+  {
+    order: 8,
+    startLat: 3.139,
+    startLng: 101.6869,
+    endLat: -6.2088,
+    endLng: 106.8456,
+    arcAlt: 0.1,
+    color: colors[Math.floor(Math.random() * colors.length)],
+  },
+];
+
+const About: React.FC<Props> = ({pageInfo}) => {
   return (
     <motion.div
     initial={{
@@ -43,6 +242,11 @@ export default function About({pageInfo}: any) {
         <h3 className='absolute top-24 uppercase tracking-[20px] text-gray-600 dark:text-gray-500 text-2xl z-20'>
             About
         </h3>
+
+        <div className='relative w-full h-[500px] md:h-[600px] z-10 flex items-center justify-center'>
+          {/* <GlobeDemo /> */}
+        </div>
+
         <motion.img 
           initial={{
             x:-200,
@@ -74,3 +278,5 @@ export default function About({pageInfo}: any) {
     </motion.div>
   )
 }
+
+export default About;

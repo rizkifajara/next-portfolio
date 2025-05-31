@@ -1,21 +1,24 @@
-import Head from "next/head";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import WorkExperience from "@/components/WorkExperience";
-import Skills from "@/components/Skills";
-import Projects from "@/components/Projects";
-import ContactMe from "@/components/ContactMe";
-import Blog from "@/components/Blog";
-import Link from "next/link";
-import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
-import { PageInfo, Experience, Skill, Project, Social, Post } from "../../typings";
-import { fetchPageInfo } from "../../utils/fetchPageInfo";
-import { fetchSkills } from "../../utils/fetchSkills";
-import { fetchExperience } from "../../utils/fetchExperience";
-import { fetchProjects } from "../../utils/fetchProjects";
-import { fetchSocials } from "../../utils/fetchSocials";
-import "react-tooltip/dist/react-tooltip.css";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Header from '@/components/Header'
+import Hero from '@/components/Hero'
+import { GetStaticProps } from 'next'
+import { Experience, PageInfo, Project, Skill, Social } from '../../typings'
+import { fetchPageInfo } from '../../utils/fetchPageInfo'
+import { fetchSkills } from '../../utils/fetchSkills'
+import { fetchExperience } from '../../utils/fetchExperience'
+import { fetchProjects } from '../../utils/fetchProjects'
+import { fetchSocials } from '../../utils/fetchSocials'
+import About from '@/components/About'
+import WorkExperience from '@/components/WorkExperience'
+import Skills from '@/components/Skills'
+import Projects from '@/components/Projects'
+import ContactMe from '@/components/ContactMe'
+import Blog from '@/components/Blog'
+import Link from 'next/link'
+import { ChevronDoubleUpIcon } from '@heroicons/react/24/outline'
+import { Post } from '../../typings'
+import 'react-tooltip/dist/react-tooltip.css'
 
 type Props = {
   pageInfo: PageInfo;
@@ -107,6 +110,7 @@ export default function Home({
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rizkifajar.dev" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://rizkifajar.dev/" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

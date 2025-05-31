@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import {motion} from 'framer-motion'
 import { Project } from '../../typings'
 import { urlFor } from '@/sanity'
-import 'react-tooltip/dist/react-tooltip.css'
-import { Tooltip } from 'react-tooltip'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import ProjectModal from './ProjectModal'
+import { Tooltip } from 'react-tooltip'
 
 type Props = {
   projects: Project[]
@@ -121,19 +120,20 @@ function Projects({projects}: Props) {
                 </h4>
                 <div key={"div3project"+i} className="flex item-center space-x-2 justify-center">
                   {project?.technologies.map((technology: any) => (
-                    <>
+                    <div key={'tech-wrapper-' + i + technology._id}>
                       <img
                         key={'imgProject'+ i + technology._id}
                         src={urlFor(technology.image).url()}
                         alt={technology.title}
                         className="h-10 w-10"
-                        data-tooltip-id={"tooltip" + technology._id}
-                        data-tooltip-content={technology.title} />
-                      
-                      <Tooltip key={"toolproject"+ i + technology._id}
-                        id={"tooltip" + technology._id}
-                        place={"top"} />
-                    </>
+                        data-tooltip-id={"tech-" + technology._id}
+                        data-tooltip-content={technology.title}
+                      />
+                      <Tooltip 
+                        id={"tech-" + technology._id}
+                        place="top"
+                      />
+                    </div>
                   ))}
                 </div>
                 <p key={"pproject"+i} className='text-lg text-center md:text-left'>
