@@ -1,15 +1,14 @@
-import { urlFor } from '@/sanity'
-import { motion } from 'framer-motion'
 import React from 'react'
-import 'react-tooltip/dist/react-tooltip.css'
+import { motion } from 'framer-motion'
+import { Experience } from '../../typings'
+import { urlFor } from '@/sanity'
 import { Tooltip } from 'react-tooltip'
-import { Experience, Technology } from '../../typings'
 
 type Props = {
     experience: Experience
 }
 
-function ExperienceCard({experience}: any) {
+const ExperienceCard = ({ experience }: Props) => {
     return (
         <div>
             <article className='flex flex-col rounded-lg items-center space-y-7 flex-shrink-0
@@ -48,20 +47,19 @@ function ExperienceCard({experience}: any) {
                     <div className='flex space-x-2 my-2'>
                         {/* Stack */}
                         {experience?.technologies.map((technology:any) => (
-                            <>
-                                <img key={"experience"+technology._id}
+                            <div key={"experience-tech-" + technology._id}>
+                                <img 
                                     className="h-10 w-10 rounded-full"
                                     src={urlFor(technology.image).url()}
                                     alt={technology.title}
-                                    data-tooltip-id={"tooltip" + technology._id}
+                                    data-tooltip-id={"exp-tech-" + technology._id}
                                     data-tooltip-content={technology.title}
                                 />
-                                
-                                <Tooltip key={"tooltipexperience"+technology._id}
-                                    id={"tooltip" + technology._id} 
-                                    place={"bottom"}
+                                <Tooltip 
+                                    id={"exp-tech-" + technology._id}
+                                    place="bottom"
                                 />
-                            </>
+                            </div>
                         ))}
                     </div>
                     <p className='uppercase py-5 text-light-secondary dark:text-gray-300'>
