@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
+  transpilePackages: [],
+  experimental: {
+    esmExternals: 'loose',
+  },
   images: {
     domains: ['cdn.sanity.io'],
   },
