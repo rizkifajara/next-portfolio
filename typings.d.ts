@@ -1,27 +1,3 @@
-// Module declarations for packages without proper TypeScript support
-declare module 'react-syntax-highlighter' {
-  import { ComponentType } from 'react';
-  
-  interface SyntaxHighlighterProps {
-    language?: string;
-    style?: any;
-    className?: string;
-    children: string;
-    [key: string]: any;
-  }
-  
-  export const Prism: ComponentType<SyntaxHighlighterProps>;
-  export default ComponentType<SyntaxHighlighterProps>;
-}
-
-declare module 'react-syntax-highlighter/dist/esm/styles/prism' {
-  export const tomorrow: any;
-}
-
-declare module 'react-syntax-highlighter/dist/cjs/styles/prism' {
-  export const tomorrow: any;
-}
-
 interface SanityBody {
     _createdAt: string;
     _id: string;
