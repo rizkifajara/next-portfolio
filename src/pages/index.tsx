@@ -102,16 +102,49 @@ export default function Home({
       <div style={{zoom: "67%", transformOrigin: "top left"}}>
       <Head>
         <title>Rizki Fajar - Software Engineer Portfolio</title>
-        <meta name="description" content="Rizki Fajar's personal portfolio website showcasing software engineering projects, skills, and professional experience." />
-        <meta name="keywords" content="Rizki Fajar, Software Engineer, Web Developer, Portfolio, Backend Engineer, AI Engineer, Full Stack Developer" />
+        <meta name="description" content="Rizki Fajar is a Software Engineer specializing in full-stack development, AI solutions, and web applications. Based in Indonesia, working at Platter.ai and BeProfesion." />
+        <meta name="keywords" content="Rizki Fajar, Software Engineer, Web Developer, AI Engineer, Full Stack Developer, Indonesia, Yogyakarta, Platter.ai, BeProfesion, React, Next.js, TypeScript, Python" />
         <meta name="author" content="Rizki Fajar" />
         <meta property="og:title" content="Rizki Fajar - Software Engineer Portfolio" />
-        <meta property="og:description" content="Rizki Fajar's personal portfolio website showcasing software engineering projects, skills, and professional experience." />
+        <meta property="og:description" content="Rizki Fajar is a Software Engineer specializing in full-stack development, AI solutions, and web applications. Based in Indonesia, working at Platter.ai and BeProfesion." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rizkifajar.dev" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://rizkifajar.dev/" />
         <link rel="icon" href="/favicon.ico" />
+        
+        {/* Add structured data for better SEO */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Rizki Fajar",
+            "url": "https://rizkifajar.dev",
+            "jobTitle": "Software Engineer",
+            "worksFor": [
+              {
+                "@type": "Organization",
+                "name": "Platter.ai",
+                "jobTitle": "AI Software Engineer"
+              },
+              {
+                "@type": "Organization",
+                "name": "BeProfesion",
+                "jobTitle": "Backend Engineer"
+              }
+            ],
+            "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "Universitas Gadjah Mada",
+              "sameAs": "https://ugm.ac.id"
+            },
+            "sameAs": [
+              "https://rizkifajar.dev",
+              "https://github.com/rizkifajar",
+              "https://linkedin.com/in/rizkifajar"
+            ]
+          })}
+        </script>
       </Head>
 
       <Header socials={socials} />

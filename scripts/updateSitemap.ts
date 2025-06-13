@@ -12,9 +12,11 @@ function updateSitemap() {
   const today = getCurrentDate();
   const urls = [
     { loc: 'https://rizkifajar.dev', priority: '1.0' },
-    { loc: 'https://rizkifajar.dev/projects', priority: '0.8' },
-    { loc: 'https://rizkifajar.dev/about', priority: '0.8' },
-    { loc: 'https://rizkifajar.dev/contact', priority: '0.7' },
+    { loc: 'https://rizkifajar.dev/#about', priority: '0.9' },
+    { loc: 'https://rizkifajar.dev/#experience', priority: '0.9' },
+    { loc: 'https://rizkifajar.dev/#skills', priority: '0.8' },
+    { loc: 'https://rizkifajar.dev/#projects', priority: '0.8' },
+    { loc: 'https://rizkifajar.dev/#contact', priority: '0.7' },
   ];
 
   const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
