@@ -16,17 +16,6 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.rizkifajar.dev',
-          },
-        ],
-        destination: 'https://rizkifajar.dev/:path*',
-        permanent: true,
-      },
     ]
   },
   async headers() {
