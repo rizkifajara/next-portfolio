@@ -133,9 +133,9 @@ const About: React.FC<Props> = ({pageInfo}) => {
             {/* Connection Info Overlay */}
             <div className="absolute bottom-1 sm:bottom-2 left-1 sm:left-2 right-1 sm:right-2 z-20">
               <div className="bg-black/80 dark:bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 text-xs sm:text-sm">
-                <h4 className="text-[#F7AB0A] font-semibold mb-1">🇮🇩 Indonesian Cities</h4>
-                <p className="text-gray-300 dark:text-gray-400 leading-tight">
-                  Interactive globe highlighting major Indonesian cities. 
+                <h4 className="text-blue-400 dark:text-[#F7AB0A] font-semibold mb-1">🇮🇩 🏠 Based in Yogyakarta, Indonesia</h4>
+                <p className="text-gray-200 dark:text-gray-300 leading-tight">
+                  Interactive globe highlighting my current location in Indonesia. 
                   <span className="hidden sm:inline">Click on the globe to see location details!</span>
                   <span className="sm:hidden">Tap to see details!</span>
                 </p>
