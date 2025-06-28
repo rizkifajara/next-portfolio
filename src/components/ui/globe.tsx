@@ -247,7 +247,7 @@ export function Globe({ globeConfig, data, onPointClick }: WorldProps) {
       .ringRepeatPeriod(
         (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings,
       );
-  }, [isInitialized, data, defaultProps.pointSize, defaultProps.showAtmosphere, defaultProps.atmosphereColor, defaultProps.atmosphereAltitude, defaultProps.polygonColor, defaultProps.arcLength, defaultProps.arcTime, defaultProps.rings, defaultProps.maxRings, onPointClick]);
+  }, [isInitialized, data, defaultProps.pointSize, defaultProps.showAtmosphere, defaultProps.atmosphereColor, defaultProps.atmosphereAltitude, defaultProps.polygonColor, defaultProps.arcLength, defaultProps.arcTime, defaultProps.rings, defaultProps.maxRings, onPointClick, globeConfig.pointColor]);
 
   // Handle rings animation with cleanup
   useEffect(() => {
@@ -262,7 +262,7 @@ export function Globe({ globeConfig, data, onPointClick }: WorldProps) {
         Math.floor((data.length * 4) / 5),
       );
 
-      const ringsData = data
+      const ringsData = (data as (Position | CityPoint)[])
         .filter((d, i) => newNumbersOfRings.includes(i))
         .map((d) => {
           // Handle both Position and CityPoint types
