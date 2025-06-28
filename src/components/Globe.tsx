@@ -8,15 +8,15 @@ export function SimpleGlobe() {
     <div className="w-full h-full flex items-center justify-center">
       <div className="relative w-64 h-64 md:w-80 md:h-80">
         {/* Main globe sphere */}
-        <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-800 shadow-2xl relative overflow-hidden animate-spin-slow">
+        <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-orange-600 dark:via-[#F7AB0A] dark:to-yellow-700 shadow-2xl relative overflow-hidden animate-spin-slow">
           {/* Globe surface pattern */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
           
           {/* Continents simulation */}
-          <div className="absolute top-1/4 left-1/3 w-8 h-12 bg-green-800/30 rounded-full transform rotate-12"></div>
-          <div className="absolute top-1/2 right-1/4 w-6 h-8 bg-green-700/30 rounded-full transform -rotate-45"></div>
-          <div className="absolute bottom-1/3 left-1/4 w-10 h-6 bg-green-800/30 rounded-full transform rotate-45"></div>
-          <div className="absolute top-3/4 right-1/3 w-4 h-6 bg-green-600/30 rounded-full transform rotate-90"></div>
+          <div className="absolute top-1/4 left-1/3 w-8 h-12 bg-gray-100/30 dark:bg-gray-800/30 rounded-full transform rotate-12"></div>
+          <div className="absolute top-1/2 right-1/4 w-6 h-8 bg-gray-200/30 dark:bg-gray-700/30 rounded-full transform -rotate-45"></div>
+          <div className="absolute bottom-1/3 left-1/4 w-10 h-6 bg-gray-100/30 dark:bg-gray-800/30 rounded-full transform rotate-45"></div>
+          <div className="absolute top-3/4 right-1/3 w-4 h-6 bg-gray-200/30 dark:bg-gray-700/30 rounded-full transform rotate-90"></div>
           
           {/* Connection lines/arcs */}
           <div className="absolute top-1/3 left-1/2 w-32 h-1 bg-cyan-400/50 rounded-full transform -rotate-45 animate-pulse"></div>

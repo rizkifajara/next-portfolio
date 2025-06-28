@@ -28,10 +28,21 @@ type Position = {
   endLng: number;
   arcAlt: number;
   color: string;
+  startLocation?: string;
+  endLocation?: string;
+};
+
+type CityPoint = {
+  order: number;
+  lat: number;
+  lng: number;
+  color: string;
+  location: string;
 };
 
 export type GlobeConfig = {
   pointSize?: number;
+  pointColor?: string;
   globeColor?: string;
   showAtmosphere?: boolean;
   atmosphereColor?: string;
@@ -58,12 +69,13 @@ export type GlobeConfig = {
 
 interface WorldProps {
   globeConfig: GlobeConfig;
-  data: Position[];
+  data: Position[] | CityPoint[];
+  onPointClick?: (location: string, position: { x: number; y: number }) => void;
 }
 
 let numbersOfRings = [0];
 
-export function Globe({ globeConfig, data }: WorldProps) {
+export function Globe({ globeConfig, data, onPointClick }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef<any>(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -120,25 +132,47 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current || !isInitialized || !data) return;
 
-    const arcs = data;
-    let points = [];
-    for (let i = 0; i < arcs.length; i++) {
-      const arc = arcs[i];
-      const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.startLat,
-        lng: arc.startLng,
-      });
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.endLat,
-        lng: arc.endLng,
-      });
+    let points: any[] = [];
+    let arcs: Position[] = [];
+    
+    // Check if data is CityPoint[] or Position[]
+    const isPointData = data.length > 0 && 'lat' in data[0];
+    
+    if (isPointData) {
+      // Handle CityPoint[] data
+      for (let i = 0; i < data.length; i++) {
+        const cityPoint = data[i] as CityPoint;
+        points.push({
+          size: defaultProps.pointSize,
+          order: cityPoint.order,
+          color: cityPoint.color,
+          lat: cityPoint.lat,
+          lng: cityPoint.lng,
+          location: cityPoint.location,
+        });
+      }
+    } else {
+      // Handle Position[] data (arcs)
+      arcs = data as Position[];
+      for (let i = 0; i < arcs.length; i++) {
+        const arc = arcs[i];
+        points.push({
+          size: defaultProps.pointSize,
+          order: arc.order,
+          color: arc.color,
+          lat: arc.startLat,
+          lng: arc.startLng,
+          location: arc.startLocation || `${arc.startLat.toFixed(2)}, ${arc.startLng.toFixed(2)}`,
+        });
+        points.push({
+          size: defaultProps.pointSize,
+          order: arc.order,
+          color: arc.color,
+          lat: arc.endLat,
+          lng: arc.endLng,
+          location: arc.endLocation || `${arc.endLat.toFixed(2)}, ${arc.endLng.toFixed(2)}`,
+        });
+      }
     }
 
     // remove duplicates for same lat and lng
@@ -160,26 +194,50 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .atmosphereAltitude(defaultProps.atmosphereAltitude)
       .hexPolygonColor(() => defaultProps.polygonColor);
 
-    globeRef.current
-      .arcsData(data)
-      .arcStartLat((d) => (d as { startLat: number }).startLat * 1)
-      .arcStartLng((d) => (d as { startLng: number }).startLng * 1)
-      .arcEndLat((d) => (d as { endLat: number }).endLat * 1)
-      .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
-      .arcColor((e: any) => (e as { color: string }).color)
-      .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
-      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
-      .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((e) => (e as { order: number }).order * 1)
-      .arcDashGap(15)
-      .arcDashAnimateTime(() => defaultProps.arcTime);
+    // Only render arcs if we have arc data
+    if (!isPointData && arcs.length > 0) {
+      globeRef.current
+        .arcsData(arcs)
+        .arcStartLat((d) => (d as { startLat: number }).startLat * 1)
+        .arcStartLng((d) => (d as { startLng: number }).startLng * 1)
+        .arcEndLat((d) => (d as { endLat: number }).endLat * 1)
+        .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
+        .arcColor((e: any) => (e as { color: string }).color)
+        .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
+        .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
+        .arcDashLength(defaultProps.arcLength)
+        .arcDashInitialGap((e) => (e as { order: number }).order * 1)
+        .arcDashGap(15)
+        .arcDashAnimateTime(() => defaultProps.arcTime);
+    } else {
+      // Clear arcs if we're showing points only
+      globeRef.current.arcsData([]);
+    }
 
     globeRef.current
       .pointsData(filteredPoints)
-      .pointColor((e) => (e as { color: string }).color)
-      .pointsMerge(true)
-      .pointAltitude(0.0)
-      .pointRadius(2);
+      .pointColor((e) => globeConfig.pointColor || (e as { color: string }).color)
+      .pointsMerge(false)
+      .pointAltitude(0.02)
+      .pointRadius((e) => defaultProps.pointSize || 3);
+
+    // Add invisible labels for click detection
+    const labelData = filteredPoints.map(point => ({
+      ...point,
+      text: '', // Empty text so labels are invisible
+    }));
+
+    console.log('Label elements created:', labelData.length);
+    console.log('Sample label:', labelData[0]);
+
+    globeRef.current
+      .labelsData(labelData)
+      .labelLat((d: any) => d.lat)
+      .labelLng((d: any) => d.lng)
+      .labelAltitude((d: any) => 0.03)
+      .labelText((d: any) => '') // Empty text
+      .labelSize(() => 0.5)
+      .labelColor(() => 'transparent'); // Make labels transparent
 
     globeRef.current
       .ringsData([])
@@ -189,19 +247,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .ringRepeatPeriod(
         (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings,
       );
-  }, [
-    isInitialized,
-    data,
-    defaultProps.pointSize,
-    defaultProps.showAtmosphere,
-    defaultProps.atmosphereColor,
-    defaultProps.atmosphereAltitude,
-    defaultProps.polygonColor,
-    defaultProps.arcLength,
-    defaultProps.arcTime,
-    defaultProps.rings,
-    defaultProps.maxRings,
-  ]);
+  }, [isInitialized, data, defaultProps.pointSize, defaultProps.showAtmosphere, defaultProps.atmosphereColor, defaultProps.atmosphereAltitude, defaultProps.polygonColor, defaultProps.arcLength, defaultProps.arcTime, defaultProps.rings, defaultProps.maxRings, onPointClick]);
 
   // Handle rings animation with cleanup
   useEffect(() => {
@@ -218,11 +264,24 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
       const ringsData = data
         .filter((d, i) => newNumbersOfRings.includes(i))
-        .map((d) => ({
-          lat: d.startLat,
-          lng: d.startLng,
-          color: d.color,
-        }));
+        .map((d) => {
+          // Handle both Position and CityPoint types
+          if ('lat' in d) {
+            // CityPoint
+            return {
+              lat: d.lat,
+              lng: d.lng,
+              color: d.color,
+            };
+          } else {
+            // Position
+            return {
+              lat: d.startLat,
+              lng: d.startLng,
+              color: d.color,
+            };
+          }
+        });
 
       globeRef.current.ringsData(ringsData);
     }, 2000);
@@ -239,7 +298,7 @@ export function WebGLRendererConfig() {
   const { gl, size } = useThree();
 
   useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
+    gl.setPixelRatio(typeof window !== 'undefined' ? window.devicePixelRatio : 1);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
   }, [gl, size]);
@@ -248,25 +307,174 @@ export function WebGLRendererConfig() {
 }
 
 export function World(props: WorldProps) {
-  const { globeConfig } = props;
+  const { globeConfig, data, onPointClick } = props;
   const scene = new Scene();
   scene.fog = new Fog(0xffffff, 400, 2000);
+  
+  // Handle click events
+  const handleCanvasClick = (event: any) => {
+    console.log('Canvas clicked:', event);
+    if (onPointClick && data) {
+      // Get mouse position relative to canvas
+      const rect = event.target.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      
+      console.log('Click coordinates:', { mouseX, mouseY, clientX: event.clientX, clientY: event.clientY });
+      
+             // Create all possible points from the data
+       interface PointData {
+         lat: number;
+         lng: number;
+         location: string;
+         color: string;
+       }
+       
+       const allPoints: PointData[] = [];
+       
+       // Check if data is CityPoint[] or Position[]
+       const isPointData = data.length > 0 && 'lat' in data[0];
+       
+       if (isPointData) {
+         // Handle CityPoint[] data
+         for (const cityPoint of data as CityPoint[]) {
+           allPoints.push({
+             lat: cityPoint.lat,
+             lng: cityPoint.lng,
+             location: cityPoint.location,
+             color: cityPoint.color
+           });
+         }
+       } else {
+         // Handle Position[] data (arcs)
+         for (const arc of data as Position[]) {
+           if (arc.startLocation) {
+             allPoints.push({
+               lat: arc.startLat,
+               lng: arc.startLng,
+               location: arc.startLocation,
+               color: arc.color
+             });
+           }
+           if (arc.endLocation) {
+             allPoints.push({
+               lat: arc.endLat,
+               lng: arc.endLng,
+               location: arc.endLocation,
+               color: arc.color
+             });
+           }
+         }
+       }
+      
+             // Remove duplicates based on lat/lng
+       const uniquePoints = allPoints.filter((point, index, self) =>
+         index === self.findIndex(p => 
+           Math.abs(p.lat - point.lat) < 0.001 && Math.abs(p.lng - point.lng) < 0.001
+         )
+       );
+       
+       console.log('Checking', uniquePoints.length, 'unique points for clicks');
+       
+       // Simple distance-based detection - find closest Indonesian point within 80px
+       let closestPoint: PointData | null = null;
+       let minDistance = 80; // 80px threshold for Indonesian points
+      
+             // For single point, use a much simpler and more generous detection
+       if (uniquePoints.length === 1) {
+         // For single point, just check if click is anywhere in the center area of the globe
+         const centerX = rect.width / 2;
+         const centerY = rect.height / 2;
+         const globeRadius = Math.min(rect.width, rect.height) * 0.4; // Assume globe takes up 40% of container
+         
+         const distanceFromCenter = Math.sqrt(
+           Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2)
+         );
+         
+         console.log(`Single point detection: click at (${mouseX}, ${mouseY}), globe center at (${centerX}, ${centerY}), distance from center: ${distanceFromCenter.toFixed(1)}px, globe radius: ${globeRadius.toFixed(1)}px`);
+         
+         // If click is within the globe area, consider it a hit
+         if (distanceFromCenter <= globeRadius) {
+           closestPoint = uniquePoints[0];
+           console.log(`Single point clicked: ${closestPoint.location}`);
+         }
+       } else {
+         // For multiple points, use the more precise estimation
+         uniquePoints.forEach(point => {
+           const centerX = rect.width / 2;
+           const centerY = rect.height / 2;
+           
+           // Better estimation for Indonesian coordinates
+           const estimatedX = centerX + (point.lng / 180) * (rect.width * 0.3);
+           const estimatedY = centerY - (point.lat / 90) * (rect.height * 0.3);
+           
+           const distance = Math.sqrt(
+             Math.pow(mouseX - estimatedX, 2) + Math.pow(mouseY - estimatedY, 2)
+           );
+           
+           console.log(`Point ${point.location} at (${point.lat}, ${point.lng}) -> estimated screen (${estimatedX.toFixed(1)}, ${estimatedY.toFixed(1)}) distance: ${distance.toFixed(1)}px`);
+           
+           if (distance < minDistance) {
+             minDistance = distance;
+             closestPoint = point;
+           }
+         });
+       }
+      
+      if (closestPoint) {
+        console.log('Closest point found:', closestPoint.location, 'at distance:', minDistance);
+        onPointClick(closestPoint.location, {
+          x: event.clientX,
+          y: event.clientY
+        });
+      } else {
+        console.log('No point found within threshold, using random point for demo');
+        // Fallback to random point for demo purposes
+        const randomPoint = data[Math.floor(Math.random() * data.length)];
+        if (randomPoint) {
+          let location = 'Unknown';
+          if ('location' in randomPoint) {
+            // CityPoint
+            location = randomPoint.location;
+          } else if ('startLocation' in randomPoint && randomPoint.startLocation) {
+            // Position with startLocation
+            location = randomPoint.startLocation;
+          } else if ('endLocation' in randomPoint && randomPoint.endLocation) {
+            // Position with endLocation
+            location = randomPoint.endLocation;
+          }
+          
+          onPointClick(location, {
+            x: event.clientX,
+            y: event.clientY
+          });
+        }
+      }
+    }
+  };
+
   return (
-    <Canvas camera={{ position: [0, 0, cameraZ], fov: 50 }}>
+    <Canvas 
+      camera={{ position: [0, 0, cameraZ], fov: 50 }}
+      onClick={handleCanvasClick}
+      style={{ cursor: 'pointer' }}
+    >
       <WebGLRendererConfig />
-      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <ambientLight color={globeConfig.ambientLight} intensity={1.2} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
         position={new Vector3(-400, 100, 400)}
+        intensity={1.5}
       />
       <directionalLight
         color={globeConfig.directionalTopLight}
         position={new Vector3(-200, 500, 200)}
+        intensity={1.2}
       />
       <pointLight
         color={globeConfig.pointLight}
         position={new Vector3(-200, 500, 200)}
-        intensity={0.8}
+        intensity={1.5}
       />
       <Globe {...props} />
       <OrbitControls

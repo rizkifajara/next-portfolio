@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { PageInfo } from '../../typings';
 import { urlFor } from '@/sanity';
 import dynamic from 'next/dynamic';
+import { useTheme } from '@/context/ThemeContext';
 
-// Dynamically import the Globe demo to prevent SSR issues
-const GlobeDemo = dynamic(() => import('./globe-demo'), {
+// Dynamically import the World component to prevent SSR issues
+const World = dynamic(() => import('@/components/ui/globe').then(mod => ({ default: mod.World })), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#F7AB0A]"></div>
+    </div>
+  )
 });
 
 type Props = {
@@ -15,199 +21,56 @@ type Props = {
 }
 
 const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
-const sampleArcs = [
+const indonesianCities = [
   {
     order: 1,
-    startLat: -19.885592,
-    startLng: -43.951191,
-    endLat: -22.9068,
-    endLng: -43.1729,
-    arcAlt: 0.1,
+    lat: -7.7956,
+    lng: 110.3695,
     color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 1,
-    startLat: 28.6139,
-    startLng: 77.209,
-    endLat: 3.139,
-    endLng: 101.6869,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 1,
-    startLat: -19.885592,
-    startLng: -43.951191,
-    endLat: -1.303396,
-    endLng: 36.852443,
-    arcAlt: 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 2,
-    startLat: 1.3521,
-    startLng: 103.8198,
-    endLat: 35.6762,
-    endLng: 139.6503,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 2,
-    startLat: 51.5072,
-    startLng: -0.1276,
-    endLat: 3.139,
-    endLng: 101.6869,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 2,
-    startLat: -15.785493,
-    startLng: -47.909029,
-    endLat: 36.162909,
-    endLng: -115.119411,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 3,
-    startLat: -33.8688,
-    startLng: 151.2093,
-    endLat: 22.3193,
-    endLng: 114.1694,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 3,
-    startLat: 21.3099,
-    startLng: -157.8581,
-    endLat: 40.7128,
-    endLng: -74.006,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 3,
-    startLat: -6.2088,
-    startLng: 106.8456,
-    endLat: 51.5072,
-    endLng: -0.1276,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 4,
-    startLat: 11.986597,
-    startLng: 8.571831,
-    endLat: -15.595412,
-    endLng: -56.05918,
-    arcAlt: 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 4,
-    startLat: -34.6118,
-    startLng: -58.3960,
-    endLat: 35.6762,
-    endLng: 139.6503,
-    arcAlt: 0.7,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 4,
-    startLat: 22.3193,
-    startLng: 114.1694,
-    endLat: 51.5072,
-    endLng: -0.1276,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 5,
-    startLat: 25.276987,
-    startLng: 55.296249,
-    endLat: 37.6872,
-    endLng: -122.4194,
-    arcAlt: 0.9,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 5,
-    startLat: 1.3521,
-    startLng: 103.8198,
-    endLat: -33.8688,
-    endLng: 151.2093,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 6,
-    startLat: 31.2304,
-    startLng: 121.4737,
-    endLat: 37.6872,
-    endLng: -122.4194,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 6,
-    startLat: -15.432563,
-    startLng: 28.315853,
-    endLat: 1.094136,
-    endLng: -63.34546,
-    arcAlt: 0.7,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 7,
-    startLat: 12.9716,
-    startLng: 77.5946,
-    endLat: 28.6139,
-    endLng: 77.209,
-    arcAlt: 0.1,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 7,
-    startLat: 26.8206,
-    startLng: 30.8025,
-    endLat: 3.139,
-    endLng: 101.6869,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 8,
-    startLat: -14.270972,
-    startLng: -170.132217,
-    endLat: -35.110117,
-    endLng: 173.550017,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 8,
-    startLat: -21.118680,
-    startLng: -175.208755,
-    endLat: 22.3193,
-    endLng: 114.1694,
-    arcAlt: 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 8,
-    startLat: 3.139,
-    startLng: 101.6869,
-    endLat: -6.2088,
-    endLng: 106.8456,
-    arcAlt: 0.1,
-    color: colors[Math.floor(Math.random() * colors.length)],
+    location: "Yogyakarta, Indonesia",
   },
 ];
 
 const About: React.FC<Props> = ({pageInfo}) => {
+  const { theme } = useTheme();
+  const [selectedLocation, setSelectedLocation] = useState<{
+    name: string;
+    position: { x: number; y: number };
+  } | null>(null);
+
+  const handlePointClick = (location: string, position: { x: number; y: number }) => {
+    console.log('handlePointClick called with:', location, position);
+    setSelectedLocation({ name: location, position });
+    // Auto-hide after 3 seconds
+    setTimeout(() => setSelectedLocation(null), 3000);
+  };
+
+  // Theme-aware globe configuration
+  const globeConfig = {
+    pointSize: 4,
+    pointColor: "#F7AB0A", // Keep the accent color for points
+    // Globe colors based on theme
+    globeColor: theme === 'dark' ? "#F7AB0A" : "#93c5fd", // Orange for dark, light blue for light
+    showAtmosphere: true,
+    atmosphereColor: theme === 'dark' ? "#F7AB0A" : "#bfdbfe", // Orange glow for dark, very light blue for light
+    atmosphereAltitude: 0.15,
+    emissive: theme === 'dark' ? "#d97706" : "#60a5fa", // Darker orange for dark, medium blue for light
+    emissiveIntensity: 0.3,
+    shininess: 1.2,
+    polygonColor: theme === 'dark' ? "rgba(34,139,34,0.6)" : "rgba(76,175,80,0.8)", // Forest green for dark theme, lighter green for light theme
+    ambientLight: theme === 'dark' ? "#f59e0b" : "#93c5fd", // Amber for dark, light blue for light
+    directionalLeftLight: "#ffffff",
+    directionalTopLight: "#ffffff", 
+    pointLight: "#ffffff",
+    arcTime: 1000,
+    arcLength: 0.9,
+    rings: 1,
+    maxRings: 3,
+    initialPosition: { lat: -2.5, lng: 118 }, // Center on Indonesia
+    autoRotate: true,
+    autoRotateSpeed: 0.5,
+  };
+
   return (
     <motion.div
     initial={{
@@ -219,10 +82,11 @@ const About: React.FC<Props> = ({pageInfo}) => {
     transition={{
       duration: 1.5
     }}
-    className='flex flex-col relative text-center md:text-left md:flex-row 
-    max-w-7xl px-10 justify-evenly mx-auto items-center'
-    style={{height:"150vh"}}
+    className='flex flex-col relative text-center md:text-left xl:flex-row 
+    max-w-7xl px-4 sm:px-6 md:px-10 justify-center xl:justify-between mx-auto items-center gap-6 sm:gap-8 md:gap-12 xl:gap-16'
+    style={{height:"150vh", paddingTop: "80px"}}
     >
+        {/* Background blobs */}
         <div className="absolute top-[20%] left-0 w-72 h-72 
           bg-blue-400/30 dark:bg-[#F7AB0A]/30 
           rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl animate-blob-infinite"
@@ -239,41 +103,76 @@ const About: React.FC<Props> = ({pageInfo}) => {
           style={{ '--animation-delay': '4000ms' } as React.CSSProperties}
         />
 
-        <h3 className='absolute top-24 uppercase tracking-[20px] text-gray-600 dark:text-gray-500 text-2xl z-20'>
+        <h3 className='absolute top-8 sm:top-10 md:top-12 lg:top-16 left-1/2 transform -translate-x-1/2 uppercase tracking-[10px] sm:tracking-[15px] md:tracking-[20px] text-gray-600 dark:text-gray-500 text-lg sm:text-xl md:text-2xl z-20'>
             About
         </h3>
 
-        <div className='relative w-full h-[500px] md:h-[600px] z-10 flex items-center justify-center'>
-          {/* <GlobeDemo /> */}
+        {/* Globe Container */}
+        <div className='relative w-full xl:w-[55%] h-[280px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[700px] z-10 order-2 xl:order-1 flex-shrink-0'>
+          <div className="w-full h-full relative flex items-center justify-center">
+            {/* Globe */}
+            <div className="w-full h-full flex items-center justify-center scale-75 sm:scale-90 md:scale-100 lg:scale-110 xl:scale-125">
+              <World data={indonesianCities} globeConfig={globeConfig} onPointClick={handlePointClick} />
+            </div>
+            
+            {/* Location Tooltip */}
+            {selectedLocation && (
+              <div 
+                className="absolute z-30 bg-black/90 dark:bg-white/90 text-white dark:text-black px-3 py-2 rounded-lg text-sm font-medium shadow-lg border border-[#F7AB0A]/30 pointer-events-none"
+                style={{
+                  left: `${selectedLocation.position.x}px`,
+                  top: `${selectedLocation.position.y}px`,
+                  transform: 'translate(-50%, -100%)'
+                }}
+              >
+                📍 {selectedLocation.name}
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/90 dark:border-t-white/90"></div>
+              </div>
+            )}
+            
+            {/* Connection Info Overlay */}
+            <div className="absolute bottom-1 sm:bottom-2 left-1 sm:left-2 right-1 sm:right-2 z-20">
+              <div className="bg-black/80 dark:bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 text-xs sm:text-sm">
+                <h4 className="text-[#F7AB0A] font-semibold mb-1">🇮🇩 Indonesian Cities</h4>
+                <p className="text-gray-300 dark:text-gray-400 leading-tight">
+                  Interactive globe highlighting major Indonesian cities. 
+                  <span className="hidden sm:inline">Click on the globe to see location details!</span>
+                  <span className="sm:hidden">Tap to see details!</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <motion.img 
-          initial={{
-            x:-200,
-            opacity: 0
-          }}
-          transition={{
-             duration: 1.2
-          }}
-          whileInView={{
-            opacity:1,
-            x:0
-          }}
-          viewport={{
-            once:true
-          }}
-          src={urlFor(pageInfo?.profilePic).url()}
-          className='-mb-20 md:mb-0 flex-shrink-0 w-56 h-56 rounded-full object-cover md:rounded-lg
-          md:w-[400px] md:h-[400px] xl-w-[500px] xl-h-[500px] z-10'
-        />
+        {/* Content Container */}
+        <div className='w-full xl:w-[40%] flex flex-col items-center xl:items-start space-y-4 sm:space-y-5 md:space-y-6 z-10 order-1 xl:order-2 xl:pl-8'>
+          <motion.img 
+            initial={{
+              x:-200,
+              opacity: 0
+            }}
+            transition={{
+               duration: 1.2
+            }}
+            whileInView={{
+              opacity:1,
+              x:0
+            }}
+            viewport={{
+              once:true
+            }}
+            src={urlFor(pageInfo?.profilePic).url()}
+            className='flex-shrink-0 w-36 h-36 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 rounded-full object-cover shadow-lg'
+          />
 
-        <div className='space-y-10 px-0 md:px-10 z-10'>
-          <h4 className='text-4xl font-semibold'>
-            Here is a <span className='underline decoration-[#F7AB0A]/50'>little</span> background
-          </h4>
-          <p className='text-lg'>
-            {pageInfo.backgroundInformation}
-          </p>
+          <div className='space-y-4 sm:space-y-5 md:space-y-6 px-2 sm:px-4 xl:px-0 text-center xl:text-left max-w-lg xl:max-w-none'>
+            <h4 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight'>
+              Here is a <span className='underline decoration-[#F7AB0A]/50'>little</span> background
+            </h4>
+            <p className='text-sm sm:text-base md:text-base lg:text-lg leading-relaxed text-gray-600 dark:text-gray-300'>
+              {pageInfo.backgroundInformation}
+            </p>
+          </div>
         </div>
     </motion.div>
   )
