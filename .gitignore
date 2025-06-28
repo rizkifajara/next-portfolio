@@ -43,3 +43,6 @@ sanity/node_modules
 
 # pm2 logs
 logs/
+
+# pm2 config
+ecosystem.config.js
