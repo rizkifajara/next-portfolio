@@ -47,8 +47,8 @@ const About: React.FC<Props> = ({pageInfo}) => {
 
   // Theme-aware globe configuration
   const globeConfig = {
-    pointSize: 4,
-    pointColor: "#F7AB0A", // Keep the accent color for points
+    pointSize: 2,
+    pointColor: theme === 'dark' ? "#93c5fd" : "#F7AB0A", // Keep the accent color for points
     // Globe colors based on theme
     globeColor: theme === 'dark' ? "#F7AB0A" : "#93c5fd", // Orange for dark, light blue for light
     showAtmosphere: true,
@@ -108,7 +108,7 @@ const About: React.FC<Props> = ({pageInfo}) => {
         </h3>
 
         {/* Globe Container */}
-        <div className='relative w-full xl:w-[55%] h-[280px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[700px] z-10 order-2 xl:order-1 flex-shrink-0'>
+        <div className='relative hidden sm:block w-full xl:w-[55%] h-[280px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[700px] z-10 order-2 xl:order-1 flex-shrink-0'>
           <div className="w-full h-full relative flex items-center justify-center">
             {/* Globe */}
             <div className="w-full h-full flex items-center justify-center scale-75 sm:scale-90 md:scale-100 lg:scale-110 xl:scale-125">
